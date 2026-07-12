@@ -57,12 +57,12 @@
         }
 
         .btn-masuk {
-            background-color: #ffffff;
-            color: #0740aa;
+            background-color: #fc8d05;
+            color: #f7f8fa;
             font-weight: 700;
             padding: 14px 32px;
             border: none;
-            border-radius: 12px;
+            border-radius: 20px;
             font-size: 16px;
             cursor: pointer;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
@@ -514,6 +514,127 @@
             /* Memberi bayangan agar logo terlihat timbul */
         }
 
+        /* Container Utama Maskot/Logo Splash */
+        /* Container Utama Maskot/Logo Splash */
+.splash-logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;       /* Ditambahkan agar posisi seluruh logo turun ke bawah */
+    margin-bottom: 30px;
+    position: relative;
+}
+
+/* 1. Style untuk Tulisan Bismillah */
+.logo-bismillah {
+    width: 150px; /* Sesuaikan ukuran tulisan arab */
+    height: auto;
+    margin-bottom: 25px; /* Jarak antara Bismillah dengan logo di bawahnya */
+    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+/* Grouping untuk Efek Bertumpuk Background & Karakter */
+.logo-character-group {
+    position: relative;
+    width: 180px;  /* Sesuaikan dengan lebar logo Anda */
+    height: 180px; /* Sesuaikan dengan tinggi logo Anda */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 3. Logo Statis (Posisi di Belakang) */
+.logo-statis-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 1;
+    opacity: 0.85;
+}
+
+/* 2. Logo Karakter (Posisi di Depan + Efek Melayang) */
+/* 2. Logo Karakter (Posisi di Depan + Efek Melayang) */
+.logo-karakter-floating {
+    position: absolute;
+    width: 85%; 
+    height: 85%;
+    object-fit: contain;
+    z-index: 3;
+    
+    /* --- PERUBAHAN DI SINI --- */
+    top: 20px; /* Menurunkan posisi awal karakter sebesar 20px ke bawah mendekati lantai/bayangan */
+    
+    /* Jalankan animasi melayang */
+    animation: melayangKarakter 3s ease-in-out infinite; 
+}
+
+/* ======================================================== */
+/* ANIMASI SINKRONISASI: KARAKTER KETIKA DEKAT DENGAN LANTAI */
+/* ======================================================== */
+
+@keyframes melayangKarakter {
+    0% {
+        transform: translateY(0px); /* Posisi paling bawah (dekat bayangan) */
+    }
+    50% {
+        transform: translateY(-15px); /* Karakter melayang naik ke atas menjauhi bayangan */
+    }
+    100% {
+        transform: translateY(0px); /* Kembali turun mendekati bayangan */
+    }
+}
+
+/* 4. Efek Bayangan di Bawah Karakter (Shadow) */
+.logo-character-group::after {
+    content: "";
+    position: absolute;
+    bottom: 0px; /* Posisi bayangan di lantai bawah karakter */
+    left: 15%;
+    width: 70%;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.25); /* Warna bayangan hitam transparan */
+    border-radius: 50%; /* Membuat bentuk elips/bulat lonjong */
+    z-index: 2;
+    filter: blur(4px); /* Memberikan efek blur halus pada bayangan */
+    /* Jalankan animasi bayangan berdenyut mengikuti karakter */
+    animation: bayanganBerdenyut 3s ease-in-out infinite;
+}
+
+/* ======================================================== */
+/* ANIMASI SINKRONISASI: KARAKTER & BAYANGAN                 */
+/* ======================================================== */
+
+/* Karakter Naik -> Bayangan Mengecil & Memudar */
+@keyframes melayangKarakter {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-15px); /* Karakter naik 15px */
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Bayangan ikut merespon gerakan karakter */
+@keyframes bayanganBerdenyut {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.7); /* Saat karakter di atas, bayangan mengecil */
+        opacity: 0.4;          /* Dan menjadi lebih samar */
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
         /* STYLE FOOTER DENGAN INDIKATOR MATA */
         footer {
             background: linear-gradient(135deg, #0740aa 0%, #1d4ed8 100%);
@@ -558,13 +679,26 @@
 <body>
 
     <!-- Element Splash Screen Pembuka Halaman -->
+    <!-- Element Splash Screen Pembuka Halaman -->
     <div class="splash-screen" id="splashScreen">
-        <!-- Tag Gambar Logo -->
-        <img src="logo.png" alt="Logo Utama" class="splash-logo">
+
+        <!-- WRAPPER LOGO MULTI-LAYER -->
+        <div class="splash-logo-container">
+            <!-- 1. Logo Atas: Tulisan Bismillah Arab -->
+            <img src="bismillah.png" alt="Bismillah" class="logo-bismillah">
+
+            <!-- Area Layer Bertumpuk (Karakter & Background) -->
+            <div class="logo-character-group">
+                <!-- 3. Logo Statis (Di Belakang Karakter) -->
+                <img src="logo-sulsel.png" alt="Logo Background" class="logo-statis-bg">
+
+                <!-- 2. Logo Karakter (Di Depan & Floating/Melayang) -->
+                <img src="sappurecca-2.png" alt="Karakter Utama" class="logo-karakter-floating">
+            </div>
+        </div>
 
         <h2>SIMONEV BINFRASWIL</h2>
         <p>Progres Strong Point Mitra Bidang Infraswil Triwulan II 2026</p>
-        <!-- Tombol ini sekarang menjadi pemicu utama masuk dan memuat data -->
         <button class="btn-masuk" onclick="bukaDashboard()">Buka Dashboard</button>
     </div>
 
@@ -630,7 +764,8 @@
 
         <main id="mainContent">
             <!-- Tempat memuat indikator loading -->
-            <p id="loadingText" style="text-align:center; padding:20px; font-weight:700; color:#0740aa; display:none;">Tungguki sebentar, ndag lamaji...</p>
+            <p id="loadingText" style="text-align:center; padding:20px; font-weight:700; color:#0740aa; display:none;">
+                Tungguki sebentar, ndag lamaji...</p>
         </main>
 
         <footer>
@@ -647,154 +782,159 @@
     </div>
 
     <script>
-    // URL Apps Script Aktif Anda
-    const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbzevC1PY9qzV7BwyGHjZCf9dlHbgMWICm3jVkM4YB5j87JAnH4Zj6A0YwCe7FT-N9s-/exec";
+        // URL Apps Script Aktif Anda
+        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbzevC1PY9qzV7BwyGHjZCf9dlHbgMWICm3jVkM4YB5j87JAnH4Zj6A0YwCe7FT-N9s-/exec";
 
-    let proyekData = [];
-    
-    // Siapkan Audio Efek Pasif
-    const tapSound = new Audio("tap_sound.mp3");
-    tapSound.preload = "auto";
-    tapSound.volume = 0.4;
+        let proyekData = [];
 
-    // 1. KETIKA HALAMAN DIKLIKS USER (FUNGSI BARU)
-    function bukaDashboard() {
-        // Sembunyikan splash screen dan tampilkan container utama
-        document.getElementById('splashScreen').style.display = 'none';
-        document.getElementById('appContainer').style.display = 'flex';
-        document.getElementById('loadingText').style.display = 'block';
-        
-        // Pemicu muat data dijalankan SETELAH user klik (Aman dari blokir audio browser)
-        document.getElementById("global_visitor_count").innerText = "Memuat...";
-        muatDataDariGoogleSheets();
-    }
+        // Siapkan Audio Efek Pasif
+        const tapSound = new Audio("tap_sound.mp3");
+        tapSound.preload = "auto";
+        tapSound.volume = 0.4;
 
-    function muatDataDariGoogleSheets() {
-        fetch(APPSCRIPT_URL, {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) throw new Error("Status " + response.status);
-            return response.text();
-        })
-        .then(textData => {
-            let data = JSON.parse(textData);
+        // 1. KETIKA HALAMAN DIKLIKS USER (FUNGSI BARU)
+        function bukaDashboard() {
+            // 1. Pancing izin browser dengan memutar suara pertama tepat saat klik terdeteksi
+            tapSound.currentTime = 0;
+            tapSound.play().catch(err => console.log("Izin audio tertahan browser:", err));
 
-            // Tampilkan Visitor
-            if (data && data.views !== undefined) {
-                document.getElementById("global_visitor_count").innerText = parseInt(data.views).toLocaleString('id-ID');
-            }
+            // 2. Sembunyikan splash screen dan tampilkan container utama
+            document.getElementById('splashScreen').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex';
+            document.getElementById('loadingText').style.display = 'block';
 
-            // Ambil Array Proyek
-            let listMentah = Array.isArray(data) ? data : (data && data.proyek ? data.proyek : []);
+            // 3. Jalankan pemuatan data
+            document.getElementById("global_visitor_count").innerText = "Memuat...";
+            muatDataDariGoogleSheets();
+        }
 
-            if (listMentah.length === 0) {
-                document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Data kosong atau tidak ditemukan di Sheet TW.II.</p>`;
-                return;
-            }
-
-            const opdDiizinkan = [
-                "DINAS SDACKTR",
-                "DINAS BMBK",
-                "DINAS PERHUBUNGAN",
-                "DINAS PERKIMTAN",
-                "DISKOMINFO",
-                "BPBD",
-                "BAPPELITBANGDA"
-            ];
-
-            proyekData = listMentah.filter(item => {
-                if (!item.opd) return false;
-                let namaOPDData = item.opd.toString().trim().toUpperCase();
-                return opdDiizinkan.includes(namaOPDData);
-            });
-
-            if (proyekData.length === 0) {
-                document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Tidak ada data dari 7 OPD prioritas.</p>`;
-                return;
-            }
-
-            // Pengelompokan berdasarkan OPD
-            const groupedData = {};
-            proyekData.forEach(item => {
-                let namaOPD = item.opd && item.opd.toString().trim() !== "" ? item.opd.toString().trim() : "LAINNYA";
-                if (!groupedData[namaOPD]) {
-                    groupedData[namaOPD] = [];
+        function muatDataDariGoogleSheets() {
+            fetch(APPSCRIPT_URL, {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json'
                 }
-                groupedData[namaOPD].push(item);
-            });
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("Status " + response.status);
+                    return response.text();
+                })
+                .then(textData => {
+                    let data = JSON.parse(textData);
 
-            renderData(groupedData);
-        })
-        .catch(err => {
-            console.error("Error:", err);
-            document.getElementById("global_visitor_count").innerText = "Gagal";
-            document.getElementById('mainContent').innerHTML = `
+                    // Tampilkan Visitor
+                    if (data && data.views !== undefined) {
+                        document.getElementById("global_visitor_count").innerText = parseInt(data.views).toLocaleString('id-ID');
+                    }
+
+                    // Ambil Array Proyek
+                    let listMentah = Array.isArray(data) ? data : (data && data.proyek ? data.proyek : []);
+
+                    if (listMentah.length === 0) {
+                        document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Data kosong atau tidak ditemukan di Sheet TW.II.</p>`;
+                        return;
+                    }
+
+                    const opdDiizinkan = [
+                        "BAPPELITBANGDA",
+                        "DINAS SDACKTR",
+                        "DINAS BMBK",
+                        "DINAS PERHUBUNGAN",
+                        "DINAS PERKIMTAN",
+                        "DISKOMINFO",
+                        "BPBD",
+
+                    ];
+
+                    proyekData = listMentah.filter(item => {
+                        if (!item.opd) return false;
+                        let namaOPDData = item.opd.toString().trim().toUpperCase();
+                        return opdDiizinkan.includes(namaOPDData);
+                    });
+
+                    if (proyekData.length === 0) {
+                        document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Tidak ada data dari 7 OPD prioritas.</p>`;
+                        return;
+                    }
+
+                    // Pengelompokan berdasarkan OPD
+                    const groupedData = {};
+                    proyekData.forEach(item => {
+                        let namaOPD = item.opd && item.opd.toString().trim() !== "" ? item.opd.toString().trim() : "LAINNYA";
+                        if (!groupedData[namaOPD]) {
+                            groupedData[namaOPD] = [];
+                        }
+                        groupedData[namaOPD].push(item);
+                    });
+
+                    renderData(groupedData);
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    document.getElementById("global_visitor_count").innerText = "Gagal";
+                    document.getElementById('mainContent').innerHTML = `
                 <div style="text-align:center; padding:30px; color:#ef4444;">
                     <p style="font-weight:700; margin-bottom:10px;">Gagal Memuat Data:</p>
                     <code style="background:#fee2e2; padding:5px 10px; border-radius:4px; font-size:12px; display:inline-block;">${err.message}</code>
                 </div>`;
-        });
-    }
+                });
+        }
 
-    function hitungTotalPagu(listKegiatan) {
-        let total = 0;
-        listKegiatan.forEach(keg => {
-            if (keg.anggaran) {
-                let angka = parseFloat(keg.anggaran.toString().replace(/[^0-9]/g, ''));
-                if (!isNaN(angka)) total += angka;
-            }
-        });
-        return "Rp " + total.toLocaleString('id-ID');
-    }
+        function hitungTotalPagu(listKegiatan) {
+            let total = 0;
+            listKegiatan.forEach(keg => {
+                if (keg.anggaran) {
+                    let angka = parseFloat(keg.anggaran.toString().replace(/[^0-9]/g, ''));
+                    if (!isNaN(angka)) total += angka;
+                }
+            });
+            return "Rp " + total.toLocaleString('id-ID');
+        }
 
-    function renderData(groupedData) {
-        const mainContent = document.getElementById('mainContent');
-        mainContent.innerHTML = ''; // Bersihkan tulisan Loading
+        function renderData(groupedData) {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = ''; // Bersihkan tulisan Loading
 
-        Object.keys(groupedData).forEach((namaOPD, index) => {
-            const listKegiatan = groupedData[namaOPD];
-            const idOPD = 'opd-' + index;
-            const totalPaguOPD = hitungTotalPagu(listKegiatan);
+            Object.keys(groupedData).forEach((namaOPD, index) => {
+                const listKegiatan = groupedData[namaOPD];
+                const idOPD = 'opd-' + index;
+                const totalPaguOPD = hitungTotalPagu(listKegiatan);
 
-            let namaBersih = namaOPD.trim();
-            let cekNamaAtas = namaBersih.toUpperCase();
+                let namaBersih = namaOPD.trim();
+                let cekNamaAtas = namaBersih.toUpperCase();
 
-            if (cekNamaAtas !== "BPBD" && cekNamaAtas !== "BAPPELITBANGDA") {
-                namaBersih = namaBersih.replace(/^(dinas|biro)\s+/i, '');
-            }
-            
-            const inisial = namaBersih.substring(0, 3).toUpperCase();
+                if (cekNamaAtas !== "BPBD" && cekNamaAtas !== "BAPPELITBANGDA") {
+                    namaBersih = namaBersih.replace(/^(dinas|biro)\s+/i, '');
+                }
 
-            let namaFileLogo = "placeholder"; 
-            if (cekNamaAtas.includes("BAPPELITBANGDA")) namaFileLogo = "logo-bappelitbangda";
-            else if (cekNamaAtas.includes("BMBK"))          namaFileLogo = "logo-bmbk";
-            else if (cekNamaAtas.includes("BPBD"))          namaFileLogo = "logo-bpbd";
-            else if (cekNamaAtas.includes("PERHUBUNGAN"))   namaFileLogo = "logo-dishub";
-            else if (cekNamaAtas.includes("DISKOMINFO"))    namaFileLogo = "logo-kominfo";
-            else if (cekNamaAtas.includes("PERKIMTAN"))     namaFileLogo = "logo-perkimtan"; 
-            else if (cekNamaAtas.includes("SDACKTR"))       namaFileLogo = "logo-sdacktr";
+                const inisial = namaBersih.substring(0, 3).toUpperCase();
 
-            let kegiatanHtml = '';
-            listKegiatan.forEach((keg, idx) => {
-                let nomorUrut = idx + 1;
-                let namaKeg = (keg.kegiatan || "-").toString();
-                let paguKeg = (keg.anggaran || "Rp 0").toString();
-                let durasiKeg = (keg.durasi || "-").toString();
-                let metodeKeg = (keg.metode || "-").toString();
-                let kontrakKeg = (keg.kontrak || "-").toString();
-                let tglKeg = (keg.tgl_kontrak || "-").toString();
-                let statusKeg = (keg.status || "-").toString();
-                let fisikKeg = (keg.physic || "0%").toString(); // disesuaikan jika field di JSON adalah fisik/physic
-                if(keg.fisik) fisikKeg = keg.fisik.toString();
-                let keuKeg = (keg.keuangan || "Rp 0").toString();
-                let ketKeg = (keg.keterangan || "-").toString();
+                let namaFileLogo = "placeholder";
+                if (cekNamaAtas.includes("BAPPELITBANGDA")) namaFileLogo = "logo-bappelitbangda";
+                else if (cekNamaAtas.includes("BMBK")) namaFileLogo = "logo-bmbk";
+                else if (cekNamaAtas.includes("BPBD")) namaFileLogo = "logo-bpbd";
+                else if (cekNamaAtas.includes("PERHUBUNGAN")) namaFileLogo = "logo-dishub";
+                else if (cekNamaAtas.includes("DISKOMINFO")) namaFileLogo = "logo-kominfo";
+                else if (cekNamaAtas.includes("PERKIMTAN")) namaFileLogo = "logo-perkimtan";
+                else if (cekNamaAtas.includes("SDACKTR")) namaFileLogo = "logo-sdacktr";
 
-                kegiatanHtml += `
+                let kegiatanHtml = '';
+                listKegiatan.forEach((keg, idx) => {
+                    let nomorUrut = idx + 1;
+                    let namaKeg = (keg.kegiatan || "-").toString();
+                    let paguKeg = (keg.anggaran || "Rp 0").toString();
+                    let durasiKeg = (keg.durasi || "-").toString();
+                    let metodeKeg = (keg.metode || "-").toString();
+                    let kontrakKeg = (keg.kontrak || "-").toString();
+                    let tglKeg = (keg.tgl_kontrak || "-").toString();
+                    let statusKeg = (keg.status || "-").toString();
+                    let fisikKeg = (keg.physic || "0%").toString(); // disesuaikan jika field di JSON adalah fisik/physic
+                    if (keg.fisik) fisikKeg = keg.fisik.toString();
+                    let keuKeg = (keg.keuangan || "Rp 0").toString();
+                    let ketKeg = (keg.keterangan || "-").toString();
+
+                    kegiatanHtml += `
                 <div class="kegiatan-card" 
                      data-nama="${namaKeg.toLowerCase()}" 
                      data-metode="${metodeKeg.toLowerCase()}" 
@@ -819,14 +959,14 @@
                         <div class="detail-row"><div class="detail-label">Keterangan</div><div class="detail-value">${ketKeg}</div></div>
                     </div>
                 </div>`;
-            });
+                });
 
-            let opdCard = document.createElement('div');
-            // Awal dibuat disembunyikan tanpa class animasi agar bisa kita kontrol jedanya lewat JS
-            opdCard.className = 'opd-card'; 
-            opdCard.setAttribute('data-index', index);
+                let opdCard = document.createElement('div');
+                // Awal dibuat disembunyikan tanpa class animasi agar bisa kita kontrol jedanya lewat JS
+                opdCard.className = 'opd-card';
+                opdCard.setAttribute('data-index', index);
 
-            opdCard.innerHTML = `
+                opdCard.innerHTML = `
             <div class="opd-main-info">
                 <div class="opd-logo-cell">
                     <img class="opd-logo"
@@ -847,133 +987,134 @@
             <div id="list-${idOPD}" class="kegiatan-container" style="display:none;">
                 ${kegiatanHtml}
             </div>`;
-            
-            mainContent.appendChild(opdCard);
-        });
 
-        // JALANKAN ANIMASI JATUH BERURUTAN SETELAH ELEMENT SELESAI DICIPTAKAN
-        mulaiAnimasiJatuhBerurutan();
-    }
-
-    function mulaiAnimasiJatuhBerurutan() {
-        const semuaKartu = document.querySelectorAll('.opd-card');
-        
-        semuaKartu.forEach((kartu, index) => {
-            // Berikan jeda staggered (berurutan) 250ms per kartu dari atas ke bawah
-            setTimeout(() => {
-                kartu.classList.add('mulai-animasi');
-                
-                // Kloning suara pop up agar bisa saling bertumpukan nadanya dengan mulus
-                let clonedSound = tapSound.cloneNode();
-                clonedSound.volume = 0.4;
-                clonedSound.play().catch(() => {});
-                
-            }, index * 250);
-        });
-    }
-
-    function toggleOPD(button, containerId) {
-        var container = document.getElementById(containerId);
-        if (container.style.display === "block") {
-            container.style.display = "none";
-            button.textContent = "Detail";
-            button.className = "btn btn-primary";
-        } else {
-            container.style.display = "block";
-            button.textContent = "Tutup";
-            button.className = "btn btn-success";
-        }
-    }
-
-    function toggleSubDetail(button) {
-        var kegiatanCard = button.closest('.kegiatan-card');
-        var subDetail = kegiatanCard.querySelector('.kegiatan-sub-detail');
-        if (subDetail.style.display === "block") {
-            subDetail.style.display = "none";
-            button.textContent = "Detail";
-            button.className = "btn btn-orange";
-        } else {
-            document.querySelectorAll('.kegiatan-sub-detail').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.kegiatan-action-cell .btn').forEach(btn => {
-                if(btn.classList.contains('btn-success')) {
-                    btn.textContent = "Detail";
-                    btn.className = "btn btn-orange";
-                }
-            });
-            subDetail.style.display = "block";
-            button.textContent = "Tutup";
-            button.className = "btn btn-success";
-        }
-    }
-
-    function toggleFilterPanel() {
-        var panel = document.getElementById('filterPanel');
-        var btn = document.getElementById('filterToggleBtn');
-        if (panel.style.display === "block") {
-            panel.style.display = "none";
-            btn.classList.remove('active');
-        } else {
-            panel.style.display = "block";
-            btn.classList.add('active');
-        }
-    }
-
-    function jalankanMultiFilter() {
-        let keyword = document.getElementById('searchInput').value.toLowerCase();
-        let fMetode = document.getElementById('filterMetode').value.toLowerCase();
-        let fKontrak = document.getElementById('filterKontrak').value.toLowerCase();
-
-        let kartuOPD = document.querySelectorAll('.opd-card');
-
-        kartuOPD.forEach(opdCard => {
-            let containerKegiatan = opdCard.querySelector('.kegiatan-container');
-            let tombolOPD = opdCard.querySelector('.opd-action-cell button');
-            let daftarKegiatan = opdCard.querySelectorAll('.kegiatan-card');
-            let adaKegiatanCocok = false;
-
-            daftarKegiatan.forEach(card => {
-                let namaKegiatan = card.getAttribute('data-nama') || "";
-                let metodeKegiatan = card.getAttribute('data-metode') || "";
-                let kontrakKegiatan = card.getAttribute('data-kontrak') || "";
-
-                let cocokKeyword = (keyword === "" || namaKegiatan.includes(keyword));
-                let cocokMetode = (fMetode === "" || metodeKegiatan.includes(fMetode));
-                let cocokKontrak = (fKontrak === "" || kontrakKegiatan.includes(fKontrak));
-
-                if (cocokKeyword && cocokMetode && cocokKontrak) {
-                    card.style.display = "block";
-                    adaKegiatanCocok = true;
-                } else {
-                    card.style.display = "none";
-                }
+                mainContent.appendChild(opdCard);
             });
 
-            if (keyword === "" && fMetode === "" && fKontrak === "") {
-                opdCard.style.display = "block";
-                containerKegiatan.style.display = "none";
-                tombolOPD.textContent = "Detail";
-                tombolOPD.className = "btn btn-primary";
-            } else if (adaKegiatanCocok) {
-                opdCard.style.display = "block";
-                containerKegiatan.style.display = "block";
-                tombolOPD.textContent = "Tutup";
-                tombolOPD.className = "btn btn-success";
+            // JALANKAN ANIMASI JATUH BERURUTAN SETELAH ELEMENT SELESAI DICIPTAKAN
+            mulaiAnimasiJatuhBerurutan();
+        }
+
+        function mulaiAnimasiJatuhBerurutan() {
+            const semuaKartu = document.querySelectorAll('.opd-card');
+
+            semuaKartu.forEach((kartu, index) => {
+                // Berikan jeda staggered (berurutan) 250ms per kartu dari atas ke bawah
+                setTimeout(() => {
+                    kartu.classList.add('mulai-animasi');
+
+                    // Kloning suara pop up agar bisa saling bertumpukan nadanya dengan mulus
+                    let clonedSound = tapSound.cloneNode();
+                    clonedSound.volume = 0.4;
+                    clonedSound.play().catch(() => { });
+
+                }, index * 250);
+            });
+        }
+
+        function toggleOPD(button, containerId) {
+            var container = document.getElementById(containerId);
+            if (container.style.display === "block") {
+                container.style.display = "none";
+                button.textContent = "Detail";
+                button.className = "btn btn-primary";
             } else {
-                opdCard.style.display = "none";
+                container.style.display = "block";
+                button.textContent = "Tutup";
+                button.className = "btn btn-success";
             }
-        });
-    }
+        }
 
-    // Suara Efek Klik Manual (Tetap Aktif)
-    let lastPlayTime = 0;
-    document.addEventListener("click", (e) => {
-        if (e.target.classList.contains('btn-masuk')) return; // Lewati klik tombol pembuka agar tidak double audio
-        const now = Date.now();
-        if (now - lastPlayTime < 250) return;
-        lastPlayTime = now;
-        tapSound.currentTime = 0;
-        tapSound.play().catch(() => {});
-    });
-</script>
+        function toggleSubDetail(button) {
+            var kegiatanCard = button.closest('.kegiatan-card');
+            var subDetail = kegiatanCard.querySelector('.kegiatan-sub-detail');
+            if (subDetail.style.display === "block") {
+                subDetail.style.display = "none";
+                button.textContent = "Detail";
+                button.className = "btn btn-orange";
+            } else {
+                document.querySelectorAll('.kegiatan-sub-detail').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.kegiatan-action-cell .btn').forEach(btn => {
+                    if (btn.classList.contains('btn-success')) {
+                        btn.textContent = "Detail";
+                        btn.className = "btn btn-orange";
+                    }
+                });
+                subDetail.style.display = "block";
+                button.textContent = "Tutup";
+                button.className = "btn btn-success";
+            }
+        }
+
+        function toggleFilterPanel() {
+            var panel = document.getElementById('filterPanel');
+            var btn = document.getElementById('filterToggleBtn');
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+                btn.classList.remove('active');
+            } else {
+                panel.style.display = "block";
+                btn.classList.add('active');
+            }
+        }
+
+        function jalankanMultiFilter() {
+            let keyword = document.getElementById('searchInput').value.toLowerCase();
+            let fMetode = document.getElementById('filterMetode').value.toLowerCase();
+            let fKontrak = document.getElementById('filterKontrak').value.toLowerCase();
+
+            let kartuOPD = document.querySelectorAll('.opd-card');
+
+            kartuOPD.forEach(opdCard => {
+                let containerKegiatan = opdCard.querySelector('.kegiatan-container');
+                let tombolOPD = opdCard.querySelector('.opd-action-cell button');
+                let daftarKegiatan = opdCard.querySelectorAll('.kegiatan-card');
+                let adaKegiatanCocok = false;
+
+                daftarKegiatan.forEach(card => {
+                    let namaKegiatan = card.getAttribute('data-nama') || "";
+                    let metodeKegiatan = card.getAttribute('data-metode') || "";
+                    let kontrakKegiatan = card.getAttribute('data-kontrak') || "";
+
+                    let cocokKeyword = (keyword === "" || namaKegiatan.includes(keyword));
+                    let cocokMetode = (fMetode === "" || metodeKegiatan.includes(fMetode));
+                    let cocokKontrak = (fKontrak === "" || kontrakKegiatan.includes(fKontrak));
+
+                    if (cocokKeyword && cocokMetode && cocokKontrak) {
+                        card.style.display = "block";
+                        adaKegiatanCocok = true;
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+
+                if (keyword === "" && fMetode === "" && fKontrak === "") {
+                    opdCard.style.display = "block";
+                    containerKegiatan.style.display = "none";
+                    tombolOPD.textContent = "Detail";
+                    tombolOPD.className = "btn btn-primary";
+                } else if (adaKegiatanCocok) {
+                    opdCard.style.display = "block";
+                    containerKegiatan.style.display = "block";
+                    tombolOPD.textContent = "Tutup";
+                    tombolOPD.className = "btn btn-success";
+                } else {
+                    opdCard.style.display = "none";
+                }
+            });
+        }
+
+        // Suara Efek Klik Manual (Tetap Aktif)
+        let lastPlayTime = 0;
+        document.addEventListener("click", (e) => {
+            if (e.target.classList.contains('btn-masuk')) return; // Lewati klik tombol pembuka agar tidak double audio
+            const now = Date.now();
+            if (now - lastPlayTime < 250) return;
+            lastPlayTime = now;
+            tapSound.currentTime = 0;
+            tapSound.play().catch(() => { });
+        });
+    </script>
 </body>
+
 </html>
