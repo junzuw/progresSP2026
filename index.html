@@ -5,7 +5,1156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Progres Program Prioritas Triwulan II 2026</title>
+    <style><!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Progres Program Prioritas 2026</title>
+    <meta property="og:title" content="Dashboard Progres Strong Point 2026" />
+    <meta property="og:description"
+        content="Klik link ini untuk melihat progres kegiatan Strong Point Mitra Bidang INFRASWIL 2026." />
+    <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail6.png" />
+    <meta property="og:url" content="https://binfraswilzulsel.my.id/" />
+    <meta property="og:type" content="website" />
+
     <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: radial-gradient(circle, #0740aa, #012d7e);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ======================================================= */
+        /* TAMBAHAN: Style untuk Splash Screen Pembuka             */
+        /* ======================================================= */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #0740aa, #011065);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            color: white;
+            transition: opacity 0.5s ease, visibility 0.5s;
+            text-align: center;
+            padding: 2px;
+        }
+
+        .splash-screen h2 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .splash-screen p {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .btn-masuk {
+            background-color: #fc8d05;
+            color: #f7f8fa;
+            font-weight: 700;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s;
+        }
+
+        .btn-masuk:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Sembunyikan container utama sebelum tombol diklik */
+        .container {
+            display: none;
+            /* Diubah nanti lewat JS menjadi flex */
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: #f8fafc;
+            min-height: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            flex-direction: column;
+        }
+
+        header {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(135deg, #0740aa 0%, #1d4ed8 100%);
+            color: #ffffff;
+            padding: 12px 20px;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: 0 10px 20px rgba(7, 64, 170, 0.2);
+        }
+
+        .header-wrap {
+            display: table;
+            width: 100%;
+        }
+
+        .header-logo-cell {
+            display: table-cell;
+            vertical-align: middle;
+            width: 55px;
+        }
+
+        .header-logo {
+            width: 95px;
+            height: 95px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            display: block;
+            object-fit: contain;
+            padding: 4px;
+            backdrop-filter: blur(5px);
+        }
+
+        .header-text-cell {
+            display: table-cell;
+            vertical-align: middle;
+            padding-left: 12px;
+        }
+
+        header h1 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 2px;
+            line-height: 1.2;
+            letter-spacing: -0.3px;
+        }
+
+        header p {
+            font-size: 11px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .search-container {
+            padding: 12px 20px 0px 20px;
+        }
+
+        .search-flex {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-filter-toggle {
+            background-color: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            height: 44px;
+            width: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            flex-shrink: 0;
+        }
+
+        .btn-filter-toggle:hover,
+        .btn-filter-toggle.active {
+            border-color: #0740aa;
+            background-color: #eff6ff;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            height: 44px;
+        }
+
+        .search-input:focus {
+            border-color: #0740aa;
+            box-shadow: 0 0 0 4px rgba(7, 64, 170, 0.15);
+        }
+
+        .filter-panel {
+            display: none;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-grid {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            color: #1e293b;
+            background-color: #f8fafc;
+        }
+
+        .filter-select:focus {
+            border-color: #0740aa;
+        }
+
+        main {
+            padding: 10px 20px 0px 20px;
+            flex: 1;
+        }
+
+        .opd-card {
+            background-color: #ffffff;
+            border-radius: 18px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #0740aa;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+            /* Properti animasi kartu */
+            opacity: 0;
+            transform: translateY(-80px);
+        }
+
+        /* Class pemicu animasi (dijalankan via JS setelah klik) */
+        .opd-card.mulai-animasi {
+            animation: kartuJatuh 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        .opd-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .opd-main-info {
+            display: table;
+            width: 100%;
+        }
+
+        .opd-logo-cell {
+            display: table-cell;
+            vertical-align: middle;
+            width: 70px;
+        }
+
+        .opd-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            display: block;
+            border: 1px solid #bfdbfe;
+            object-fit: contain;
+            background-color: #ffffff;
+        }
+
+        .opd-details-cell {
+            display: table-cell;
+            vertical-align: middle;
+            padding-left: 7px;
+        }
+
+        .opd-title {
+            font-size: 17.5px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1px;
+            line-height: 1;
+        }
+
+        .opd-meta {
+            font-size: 13.5px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .opd-meta span {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .pagu-total {
+            color: #0740aa !important;
+            font-weight: 700 !important;
+            font-size: 14.5px;
+        }
+
+        .opd-action-cell {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
+            width: 75px;
+        }
+
+        .btn {
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.2s ease;
+            line-height: 1.2;
+        }
+
+        .btn-primary {
+            background-color: #0740aa;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-success {
+            background-color: #10b981;
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .btn-orange {
+            background-color: #f97316;
+            color: #ffffff;
+        }
+
+        .btn-orange:hover {
+            background-color: #ea580c;
+        }
+
+        .kegiatan-container {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed #e2e8f0;
+        }
+
+        .kegiatan-card {
+            background-color: #f8fafc;
+            border: 1px solid #5d0ddd;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .kegiatan-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .kegiatan-main-info {
+            display: table;
+            width: 100%;
+        }
+
+        .kegiatan-text-cell {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .kegiatan-title {
+            font-size: 15.5px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .kegiatan-pagu {
+            font-size: 13.5px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .kegiatan-action-cell {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
+            width: 70px;
+        }
+
+        .kegiatan-sub-detail {
+            display: none;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 13.5px;
+        }
+
+        .detail-row {
+            display: table;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            display: table-cell;
+            width: 45%;
+            color: #64748b;
+            font-weight: 500;
+            padding: 2px 0;
+        }
+
+        .detail-value {
+            display: table-cell;
+            width: 55%;
+            color: #0f172a;
+            font-weight: 600;
+            text-align: right;
+            padding: 2px 0;
+        }
+
+        .status-badge {
+            background-color: #dbeafe;
+            color: #1e40af;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        @keyframes kartuJatuh {
+            0% {
+                opacity: 0;
+                transform: translateY(-80px);
+            }
+
+            60% {
+                opacity: 0.8;
+                transform: translateY(8px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ======================================================= */
+        /* Mode Landscape HP & Layar Lebar (Min 650px)            */
+        /* ======================================================= */
+        @media screen and (min-width: 650px) {
+            .container {
+                max-width: 100% !important;
+            }
+
+            main {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 16px;
+                padding: 15px 20px;
+            }
+
+            .opd-card {
+                margin-bottom: 0 !important;
+                height: max-content;
+            }
+        }
+
+        /* TAMBAHAN: Style khusus untuk logo di splash screen */
+        .splash-logo {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 20px;
+
+            /* Sentuhan agar logo kotak putihmu terlihat rapi dan elegan: */
+            border-radius: 20px;
+            /* Membuat sudut kotak putih menjadi tumpul/halus */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            /* Memberi bayangan agar logo terlihat timbul */
+        }
+
+        /* Container Utama Maskot/Logo Splash */
+        /* Container Utama Maskot/Logo Splash */
+        .splash-logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+            /* Ditambahkan agar posisi seluruh logo turun ke bawah */
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        /* 1. Style untuk Tulisan Bismillah */
+        .logo-bismillah {
+            width: 175px;
+            /* Sesuaikan ukuran tulisan arab */
+            height: auto;
+            margin-bottom: 25px;
+            /* Jarak antara Bismillah dengan logo di bawahnya */
+            filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.15));
+        }
+
+        /* Grouping untuk Efek Bertumpuk Background & Karakter */
+        .logo-character-group {
+            position: relative;
+            width:240px;
+            /* Sesuaikan dengan lebar logo Anda */
+            height: 180px;
+            /* Sesuaikan dengan tinggi logo Anda */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 3. Logo Statis (Posisi di Belakang) */
+        .logo-statis-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: 1;
+        }
+
+        /* 2. Logo Karakter (Posisi di Depan + Efek Melayang) */
+        /* 2. Logo Karakter (Posisi di Depan + Efek Melayang) */
+        .logo-karakter-floating {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            object-fit: contain;
+            z-index: 3;
+
+            /* --- PERUBAHAN DI SINI --- */
+            top: 20px;
+            /* Menurunkan posisi awal karakter sebesar 20px ke bawah mendekati lantai/bayangan */
+
+            /* Jalankan animasi melayang */
+            animation: melayangKarakter 3s ease-in-out infinite;
+        }
+
+        /* ======================================================== */
+        /* ANIMASI SINKRONISASI: KARAKTER KETIKA DEKAT DENGAN LANTAI */
+        /* ======================================================== */
+
+        @keyframes melayangKarakter {
+            0% {
+                transform: translateY(0px);
+                /* Posisi paling bawah (dekat bayangan) */
+            }
+
+            50% {
+                transform: translateY(-15px);
+                /* Karakter melayang naik ke atas menjauhi bayangan */
+            }
+
+            100% {
+                transform: translateY(0px);
+                /* Kembali turun mendekati bayangan */
+            }
+        }
+
+        /* 4. Efek Bayangan di Bawah Karakter (Shadow) */
+        .logo-character-group::after {
+            content: "";
+            position: absolute;
+            bottom: 0px;
+            /* Posisi bayangan di lantai bawah karakter */
+            left: 15%;
+            width: 70%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.25);
+            /* Warna bayangan hitam transparan */
+            border-radius: 50%;
+            /* Membuat bentuk elips/bulat lonjong */
+            z-index: 2;
+            filter: blur(4px);
+            /* Memberikan efek blur halus pada bayangan */
+            /* Jalankan animasi bayangan berdenyut mengikuti karakter */
+            animation: bayanganBerdenyut 3s ease-in-out infinite;
+        }
+
+        /* ======================================================== */
+        /* ANIMASI SINKRONISASI: KARAKTER & BAYANGAN                 */
+        /* ======================================================== */
+
+        /* Karakter Naik -> Bayangan Mengecil & Memudar */
+        @keyframes melayangKarakter {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+                /* Karakter naik 15px */
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Bayangan ikut merespon gerakan karakter */
+        @keyframes bayanganBerdenyut {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(0.7);
+                /* Saat karakter di atas, bayangan mengecil */
+                opacity: 0.4;
+                /* Dan menjadi lebih samar */
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* STYLE FOOTER DENGAN INDIKATOR MATA */
+        footer {
+            background: linear-gradient(135deg, #0740aa 0%, #1d4ed8 100%);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            line-height: 1.4;
+            letter-spacing: 0.5px;
+        }
+
+        .view-counter {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
+            /* Mengatur jarak vertikal di bawah kalimat */
+        }
+
+        .view-counter svg {
+            fill: #ffffff;
+            width: 14px;
+            height: 14px;
+        }
+
+        .view-counter span {
+            color: #caf8f9;
+            /* Warna hijau terang untuk angka */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Element Splash Screen Pembuka Halaman -->
+    <!-- Element Splash Screen Pembuka Halaman -->
+    <div class="splash-screen" id="splashScreen">
+
+        <!-- WRAPPER LOGO MULTI-LAYER -->
+        <div class="splash-logo-container">
+            <!-- 1. Logo Atas: Tulisan Bismillah Arab -->
+            <img src="bismillah.png" alt="Bismillah" class="logo-bismillah">
+
+            <!-- Area Layer Bertumpuk (Karakter & Background) -->
+            <div class="logo-character-group">
+                <!-- 3. Logo Statis (Di Belakang Karakter) -->
+                <img src="logo-sulsel.png" alt="Logo Background" class="logo-statis-bg">
+
+                <!-- 2. Logo Karakter (Di Depan & Floating/Melayang) -->
+                <img src="sappurecca-2.png" alt="Karakter Utama" class="logo-karakter-floating">
+            </div>
+        </div>
+        <h2>Selamat Datang</h2>
+        <p> Di Halaman Progres Program Prioritas
+            <br>Mitra Bidang <b>INFRASWIL</b> 2026</p>
+        <button class="btn-masuk" onclick="bukaDashboard()">Buka Dashboard</button>
+    </div>
+
+    <!-- Container Dashboard Utama -->
+    <div class="container" id="appContainer">
+        <header>
+            <div class="header-wrap">
+                <div class="header-logo-cell">
+                    <img class="header-logo" src="logo.png" alt="Logo Utama">
+                </div>
+                <div class="header-text-cell">
+                    <h1>Progres Strong Point<br>
+                        Mitra Bidang Infraswil Triwulan II 2026</h1>
+                    <p>Sistem Monitoring & Evaluasi (SIMONEV) BINFRASWIL</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="search-container">
+            <div class="search-flex">
+                <button class="btn-filter-toggle" id="filterToggleBtn" onclick="toggleFilterPanel()"
+                    title="Saring Pilihan">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0740aa" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                </button>
+                <input type="text" id="searchInput" class="search-input" placeholder="Cari nama kegiatan..."
+                    onkeyup="jalankanMultiFilter()">
+            </div>
+
+            <div class="filter-panel" id="filterPanel">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Metode Pengadaan</label>
+                        <select id="filterMetode" class="filter-select" onchange="jalankanMultiFilter()">
+                            <option value="">Semua Metode</option>
+                            <option value="Swakelola">Swakelola</option>
+                            <option value="Swakelola Type 2">Swakelola Tipe 2</option>
+                            <option value="E-Purchasing">E-Purchasing</option>
+                            <option value="Tender">Tender</option>
+                            <option value="Seleksi">Seleksi</option>
+                            <option value="RO">RO (Repeat Order)</option>
+                            <option value="Pengadaan Langsung">Pengadaan Langsung</option>
+                            <option value="Hibah">Hibah</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Jenis Kontrak</label>
+                        <select id="filterKontrak" class="filter-select" onchange="jalankanMultiFilter()">
+                            <option value="">Semua Kontrak</option>
+                            <option value="Lumpsum">Lumpsum</option>
+                            <option value="Harga Satuan">Harga Satuan</option>
+                            <option value="Waktu Penugasan">Waktu Penugasan</option>
+                            <option value="Gabungan Harga satuan & Lumpsump">Gabungan Harga Satuan & Lumpsum</option>
+                            <option value="termin & lumpsump">Termin & Lumpsum</option>
+                            <option value="Hibah">Hibah</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main id="mainContent">
+            <!-- Tempat memuat indikator loading -->
+            <p id="loadingText" style="text-align:center; padding:20px; font-weight:700; color:#0740aa; display:none;">
+                Tungguki sebentar, ndag lamaji...</p>
+        </main>
+
+        <footer>
+            <div>Strong Point Progress 2026 © Copyright by @zuwlend</div>
+
+            <div class="view-counter">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                </svg>
+                <span id="global_visitor_count">...</span>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // URL Apps Script Aktif Anda
+        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbzevC1PY9qzV7BwyGHjZCf9dlHbgMWICm3jVkM4YB5j87JAnH4Zj6A0YwCe7FT-N9s-/exec";
+
+        let proyekData = [];
+
+        // Siapkan Audio Efek Pasif
+        const tapSound = new Audio("tap_sound.mp3");
+        tapSound.preload = "auto";
+        tapSound.volume = 0.4;
+
+        // 1. KETIKA HALAMAN DIKLIKS USER (FUNGSI BARU)
+        function bukaDashboard() {
+            // 1. Pancing izin browser dengan memutar suara pertama tepat saat klik terdeteksi
+            tapSound.currentTime = 0;
+            tapSound.play().catch(err => console.log("Izin audio tertahan browser:", err));
+
+            // 2. Sembunyikan splash screen dan tampilkan container utama
+            document.getElementById('splashScreen').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex';
+            document.getElementById('loadingText').style.display = 'block';
+
+            // 3. Jalankan pemuatan data
+            document.getElementById("global_visitor_count").innerText = "";
+            muatDataDariGoogleSheets();
+        }
+
+        function muatDataDariGoogleSheets() {
+            fetch(APPSCRIPT_URL, {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("Status " + response.status);
+                    return response.text();
+                })
+                .then(textData => {
+                    let data = JSON.parse(textData);
+
+                    // Tampilkan Visitor
+                    if (data && data.views !== undefined) {
+                        document.getElementById("global_visitor_count").innerText = parseInt(data.views).toLocaleString('id-ID');
+                    }
+
+                    // Ambil Array Proyek
+                    let listMentah = Array.isArray(data) ? data : (data && data.proyek ? data.proyek : []);
+
+                    if (listMentah.length === 0) {
+                        document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Data kosong atau tidak ditemukan di Sheet TW.II.</p>`;
+                        return;
+                    }
+
+                    const opdDiizinkan = [
+                        "BAPPELITBANGDA",
+                        "DINAS SDACKTR",
+                        "DINAS BMBK",
+                        "DINAS PERHUBUNGAN",
+                        "DINAS PERKIMTAN",
+                        "DISKOMINFO",
+                        "BPBD",
+
+                    ];
+
+                    proyekData = listMentah.filter(item => {
+                        if (!item.opd) return false;
+                        let namaOPDData = item.opd.toString().trim().toUpperCase();
+                        return opdDiizinkan.includes(namaOPDData);
+                    });
+
+                    if (proyekData.length === 0) {
+                        document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Tidak ada data dari 7 OPD prioritas.</p>`;
+                        return;
+                    }
+
+                    // Pengelompokan berdasarkan OPD
+                    const groupedData = {};
+                    proyekData.forEach(item => {
+                        let namaOPD = item.opd && item.opd.toString().trim() !== "" ? item.opd.toString().trim() : "LAINNYA";
+                        if (!groupedData[namaOPD]) {
+                            groupedData[namaOPD] = [];
+                        }
+                        groupedData[namaOPD].push(item);
+                    });
+
+                    renderData(groupedData);
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    document.getElementById("global_visitor_count").innerText = "Gagal";
+                    document.getElementById('mainContent').innerHTML = `
+                <div style="text-align:center; padding:30px; color:#ef4444;">
+                    <p style="font-weight:700; margin-bottom:10px;">Gagal Memuat Data:</p>
+                    <code style="background:#fee2e2; padding:5px 10px; border-radius:0px; font-size:12px; display:inline-block;">${err.message}</code>
+                </div>`;
+                });
+        }
+
+        function hitungTotalPagu(listKegiatan) {
+            let total = 0;
+            listKegiatan.forEach(keg => {
+                if (keg.anggaran) {
+                    let angka = parseFloat(keg.anggaran.toString().replace(/[^0-9]/g, ''));
+                    if (!isNaN(angka)) total += angka;
+                }
+            });
+            return "Rp " + total.toLocaleString('id-ID');
+        }
+
+        function renderData(groupedData) {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = ''; // Bersihkan tulisan Loading
+
+            Object.keys(groupedData).forEach((namaOPD, index) => {
+                const listKegiatan = groupedData[namaOPD];
+                const idOPD = 'opd-' + index;
+                const totalPaguOPD = hitungTotalPagu(listKegiatan);
+
+                let namaBersih = namaOPD.trim();
+                let cekNamaAtas = namaBersih.toUpperCase();
+
+                if (cekNamaAtas !== "BPBD" && cekNamaAtas !== "BAPPELITBANGDA") {
+                    namaBersih = namaBersih.replace(/^(dinas|biro)\s+/i, '');
+                }
+
+                const inisial = namaBersih.substring(0, 3).toUpperCase();
+
+                let namaFileLogo = "placeholder";
+                if (cekNamaAtas.includes("BAPPELITBANGDA")) namaFileLogo = "logo-bappelitbangda";
+                else if (cekNamaAtas.includes("BMBK")) namaFileLogo = "logo-bmbk";
+                else if (cekNamaAtas.includes("BPBD")) namaFileLogo = "logo-bpbd";
+                else if (cekNamaAtas.includes("PERHUBUNGAN")) namaFileLogo = "logo-dishub";
+                else if (cekNamaAtas.includes("DISKOMINFO")) namaFileLogo = "logo-kominfo";
+                else if (cekNamaAtas.includes("PERKIMTAN")) namaFileLogo = "logo-perkimtan";
+                else if (cekNamaAtas.includes("SDACKTR")) namaFileLogo = "logo-sdacktr";
+
+                let kegiatanHtml = '';
+                listKegiatan.forEach((keg, idx) => {
+                    let nomorUrut = idx + 1;
+                    let namaKeg = (keg.kegiatan || "-").toString();
+                    let paguKeg = (keg.anggaran || "Rp 0").toString();
+                    let durasiKeg = (keg.durasi || "-").toString();
+                    let metodeKeg = (keg.metode || "-").toString();
+                    let kontrakKeg = (keg.kontrak || "-").toString();
+                    let tglKeg = (keg.tgl_kontrak || "-").toString();
+                    let statusKeg = (keg.status || "-").toString();
+                    let fisikKeg = (keg.physic || "0%").toString(); // disesuaikan jika field di JSON adalah fisik/physic
+                    if (keg.fisik) fisikKeg = keg.fisik.toString();
+                    let keuKeg = (keg.keuangan || "Rp 0").toString();
+                    let ketKeg = (keg.keterangan || "-").toString();
+
+                    kegiatanHtml += `
+                <div class="kegiatan-card" 
+                     data-nama="${namaKeg.toLowerCase()}" 
+                     data-metode="${metodeKeg.toLowerCase()}" 
+                     data-kontrak="${kontrakKeg.toLowerCase()}">
+                    <div class="kegiatan-main-info">
+                        <div class="kegiatan-text-cell">
+                            <div class="kegiatan-title">${nomorUrut}. ${namaKeg}</div>
+                            <div class="kegiatan-pagu">Anggaran: ${paguKeg}</div>
+                        </div>
+                        <div class="kegiatan-action-cell">
+                            <button class="btn btn-orange" onclick="toggleSubDetail(this)">Detail</button>
+                        </div>
+                    </div>
+                    <div class="kegiatan-sub-detail">
+                        <div class="detail-row"><div class="detail-label">Durasi Kerja</div><div class="detail-value">${durasiKeg}</div></div>
+                        <div class="detail-row"><div class="detail-label">Metode Pengadaan</div><div class="detail-value">${metodeKeg}</div></div>
+                        <div class="detail-row"><div class="detail-label">Jenis Kontrak</div><div class="detail-value">${kontrakKeg}</div></div>
+                        <div class="detail-row"><div class="detail-label">Tgl Berkontrak</div><div class="detail-value">${tglKeg}</div></div>
+                        <div class="detail-row"><div class="detail-label">Status</div><div class="detail-value"><span class="status-badge">${statusKeg}</span></div></div>
+                        <div class="detail-row"><div class="detail-label">Fisik</div><div class="detail-value">${fisikKeg}</div></div>
+                        <div class="detail-row"><div class="detail-label">Keuangan</div><div class="detail-value">${keuKeg}</div></div>
+                        <div class="detail-row"><div class="detail-label">Keterangan</div><div class="detail-value">${ketKeg}</div></div>
+                    </div>
+                </div>`;
+                });
+
+                let opdCard = document.createElement('div');
+                // Awal dibuat disembunyikan tanpa class animasi agar bisa kita kontrol jedanya lewat JS
+                opdCard.className = 'opd-card';
+                opdCard.setAttribute('data-index', index);
+
+                opdCard.innerHTML = `
+            <div class="opd-main-info">
+                <div class="opd-logo-cell">
+                    <img class="opd-logo"
+                         src="${namaFileLogo}.png" alt="Logo ${namaOPD}"
+                         onerror="this.onerror=null; this.src='https://placehold.co/70x70?text=${inisial}';">
+                </div>
+                <div class="opd-details-cell">
+                    <div class="opd-title">${namaOPD}</div>
+                    <div class="opd-meta">
+                        Pagu: <span class="pagu-total">${totalPaguOPD}</span><br>
+                        Jumlah: <span>${listKegiatan.length} Kegiatan</span>
+                    </div>
+                </div>
+                <div class="opd-action-cell">
+                    <button class="btn btn-primary" onclick="toggleOPD(this, 'list-${idOPD}')">Detail</button>
+                </div>
+            </div>
+            <div id="list-${idOPD}" class="kegiatan-container" style="display:none;">
+                ${kegiatanHtml}
+            </div>`;
+
+                mainContent.appendChild(opdCard);
+            });
+
+            // JALANKAN ANIMASI JATUH BERURUTAN SETELAH ELEMENT SELESAI DICIPTAKAN
+            mulaiAnimasiJatuhBerurutan();
+        }
+
+        function mulaiAnimasiJatuhBerurutan() {
+            const semuaKartu = document.querySelectorAll('.opd-card');
+
+            semuaKartu.forEach((kartu, index) => {
+                // Berikan jeda staggered (berurutan) 250ms per kartu dari atas ke bawah
+                setTimeout(() => {
+                    kartu.classList.add('mulai-animasi');
+
+                    // Kloning suara pop up agar bisa saling bertumpukan nadanya dengan mulus
+                    let clonedSound = tapSound.cloneNode();
+                    clonedSound.volume = 0.4;
+                    clonedSound.play().catch(() => { });
+
+                }, index * 250);
+            });
+        }
+
+        function toggleOPD(button, containerId) {
+            var container = document.getElementById(containerId);
+            if (container.style.display === "block") {
+                container.style.display = "none";
+                button.textContent = "Detail";
+                button.className = "btn btn-primary";
+            } else {
+                container.style.display = "block";
+                button.textContent = "Tutup";
+                button.className = "btn btn-success";
+            }
+        }
+
+        function toggleSubDetail(button) {
+            var kegiatanCard = button.closest('.kegiatan-card');
+            var subDetail = kegiatanCard.querySelector('.kegiatan-sub-detail');
+            if (subDetail.style.display === "block") {
+                subDetail.style.display = "none";
+                button.textContent = "Detail";
+                button.className = "btn btn-orange";
+            } else {
+                document.querySelectorAll('.kegiatan-sub-detail').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.kegiatan-action-cell .btn').forEach(btn => {
+                    if (btn.classList.contains('btn-success')) {
+                        btn.textContent = "Detail";
+                        btn.className = "btn btn-orange";
+                    }
+                });
+                subDetail.style.display = "block";
+                button.textContent = "Tutup";
+                button.className = "btn btn-success";
+            }
+        }
+
+        function toggleFilterPanel() {
+            var panel = document.getElementById('filterPanel');
+            var btn = document.getElementById('filterToggleBtn');
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+                btn.classList.remove('active');
+            } else {
+                panel.style.display = "block";
+                btn.classList.add('active');
+            }
+        }
+
+        function jalankanMultiFilter() {
+            let keyword = document.getElementById('searchInput').value.toLowerCase();
+            let fMetode = document.getElementById('filterMetode').value.toLowerCase();
+            let fKontrak = document.getElementById('filterKontrak').value.toLowerCase();
+
+            let kartuOPD = document.querySelectorAll('.opd-card');
+
+            kartuOPD.forEach(opdCard => {
+                let containerKegiatan = opdCard.querySelector('.kegiatan-container');
+                let tombolOPD = opdCard.querySelector('.opd-action-cell button');
+                let daftarKegiatan = opdCard.querySelectorAll('.kegiatan-card');
+                let adaKegiatanCocok = false;
+
+                daftarKegiatan.forEach(card => {
+                    let namaKegiatan = card.getAttribute('data-nama') || "";
+                    let metodeKegiatan = card.getAttribute('data-metode') || "";
+                    let kontrakKegiatan = card.getAttribute('data-kontrak') || "";
+
+                    let cocokKeyword = (keyword === "" || namaKegiatan.includes(keyword));
+                    let cocokMetode = (fMetode === "" || metodeKegiatan.includes(fMetode));
+                    let cocokKontrak = (fKontrak === "" || kontrakKegiatan.includes(fKontrak));
+
+                    if (cocokKeyword && cocokMetode && cocokKontrak) {
+                        card.style.display = "block";
+                        adaKegiatanCocok = true;
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+
+                if (keyword === "" && fMetode === "" && fKontrak === "") {
+                    opdCard.style.display = "block";
+                    containerKegiatan.style.display = "none";
+                    tombolOPD.textContent = "Detail";
+                    tombolOPD.className = "btn btn-primary";
+                } else if (adaKegiatanCocok) {
+                    opdCard.style.display = "block";
+                    containerKegiatan.style.display = "block";
+                    tombolOPD.textContent = "Tutup";
+                    tombolOPD.className = "btn btn-success";
+                } else {
+                    opdCard.style.display = "none";
+                }
+            });
+        }
+
+        // Suara Efek Klik Manual (Tetap Aktif)
+        let lastPlayTime = 0;
+        document.addEventListener("click", (e) => {
+            if (e.target.classList.contains('btn-masuk')) return; // Lewati klik tombol pembuka agar tidak double audio
+            const now = Date.now();
+            if (now - lastPlayTime < 250) return;
+            lastPlayTime = now;
+            tapSound.currentTime = 0;
+            tapSound.play().catch(() => { });
+        });
+    </script>
+</body>
+
+</html>
         *,
         *::before,
         *::after {
