@@ -74,38 +74,6 @@
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
         }
 
-        /* Gaya untuk Animasi Loading di Tombol */
-        .btn-masuk.loading {
-            background-color: #e2e8f0;
-            color: #94a3b8;
-            cursor: not-allowed;
-            pointer-events: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .spinner {
-            width: 18px;
-            height: 18px;
-            border: 3px solid #94a3b8;
-            border-bottom-color: transparent;
-            border-radius: 50%;
-            display: inline-block;
-            animation: putarSpinner 1s linear infinite;
-        }
-
-        @keyframes putarSpinner {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-
         /* Sembunyikan container utama sebelum tombol diklik */
         .container {
             display: none;
@@ -590,18 +558,17 @@
 <body>
 
     <!-- Element Splash Screen Pembuka Halaman -->
-    <!-- Element Splash Screen Pembuka Halaman -->
     <div class="splash-screen" id="splashScreen">
-        <!-- TAMBAHAN: Tag Gambar Logo -->
+        <!-- Tag Gambar Logo -->
         <img src="logo.png" alt="Logo Utama" class="splash-logo">
 
         <h2>SIMONEV BINFRASWIL</h2>
         <p>Progres Strong Point Mitra Bidang Infraswil Triwulan II 2026</p>
-        <!-- Anda bisa mengubah teks tombol di bawah ini sesuai selera (misal: "Buka Dashboard") -->
-        <button class="btn-masuk" onclick="mulaiLoadingDashboard(this)">Click On Me</button>
+        <!-- Tombol ini sekarang menjadi pemicu utama masuk dan memuat data -->
+        <button class="btn-masuk" onclick="bukaDashboard()">Buka Dashboard</button>
     </div>
 
-    <!-- Container Dashboard Utama (Sisa kode ke bawah tetap sama) -->
+    <!-- Container Dashboard Utama -->
     <div class="container" id="appContainer">
         <header>
             <div class="header-wrap">
@@ -662,13 +629,13 @@
         </div>
 
         <main id="mainContent">
+            <!-- Tempat memuat indikator loading -->
+            <p id="loadingText" style="text-align:center; padding:20px; font-weight:700; color:#0740aa; display:none;">Tungguki sebentar, ndag lamaji...</p>
         </main>
 
         <footer>
-            <!-- Kalimat teks footer dibungkus div agar membuat baris baru -->
             <div>Strong Point Progress 2026 © Copyright by @zuwlend</div>
 
-            <!-- Gambar mata otomatis turun tepat berada di bawah kalimat -->
             <div class="view-counter">
                 <svg viewBox="0 0 24 24">
                     <path
@@ -680,108 +647,114 @@
     </div>
 
     <script>
-        // URL Apps Script Aktif Anda
-        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbzevC1PY9qzV7BwyGHjZCf9dlHbgMWICm3jVkM4YB5j87JAnH4Zj6A0YwCe7FT-N9s-/exec";
+    // URL Apps Script Aktif Anda
+    const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbzevC1PY9qzV7BwyGHjZCf9dlHbgMWICm3jVkM4YB5j87JAnH4Zj6A0YwCe7FT-N9s-/exec";
 
-        let proyekData = [];
+    let proyekData = [];
+    
+    // Siapkan Audio Efek Pasif
+    const tapSound = new Audio("tap_sound.mp3");
+    tapSound.preload = "auto";
+    tapSound.volume = 0.4;
 
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("global_visitor_count").innerText = "Memuat...";
-            muatDataDariGoogleSheets();
-        });
+    // 1. KETIKA HALAMAN DIKLIKS USER (FUNGSI BARU)
+    function bukaDashboard() {
+        // Sembunyikan splash screen dan tampilkan container utama
+        document.getElementById('splashScreen').style.display = 'none';
+        document.getElementById('appContainer').style.display = 'flex';
+        document.getElementById('loadingText').style.display = 'block';
+        
+        // Pemicu muat data dijalankan SETELAH user klik (Aman dari blokir audio browser)
+        document.getElementById("global_visitor_count").innerText = "Memuat...";
+        muatDataDariGoogleSheets();
+    }
 
-        function muatDataDariGoogleSheets() {
-            fetch(APPSCRIPT_URL, {
-                method: 'GET',
-                mode: 'cors',
-                headers: {
-                    'Accept': 'application/json'
+    function muatDataDariGoogleSheets() {
+        fetch(APPSCRIPT_URL, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Status " + response.status);
+            return response.text();
+        })
+        .then(textData => {
+            let data = JSON.parse(textData);
+
+            // Tampilkan Visitor
+            if (data && data.views !== undefined) {
+                document.getElementById("global_visitor_count").innerText = parseInt(data.views).toLocaleString('id-ID');
+            }
+
+            // Ambil Array Proyek
+            let listMentah = Array.isArray(data) ? data : (data && data.proyek ? data.proyek : []);
+
+            if (listMentah.length === 0) {
+                document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Data kosong atau tidak ditemukan di Sheet TW.II.</p>`;
+                return;
+            }
+
+            const opdDiizinkan = [
+                "DINAS SDACKTR",
+                "DINAS BMBK",
+                "DINAS PERHUBUNGAN",
+                "DINAS PERKIMTAN",
+                "DISKOMINFO",
+                "BPBD",
+                "BAPPELITBANGDA"
+            ];
+
+            proyekData = listMentah.filter(item => {
+                if (!item.opd) return false;
+                let namaOPDData = item.opd.toString().trim().toUpperCase();
+                return opdDiizinkan.includes(namaOPDData);
+            });
+
+            if (proyekData.length === 0) {
+                document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Tidak ada data dari 7 OPD prioritas.</p>`;
+                return;
+            }
+
+            // Pengelompokan berdasarkan OPD
+            const groupedData = {};
+            proyekData.forEach(item => {
+                let namaOPD = item.opd && item.opd.toString().trim() !== "" ? item.opd.toString().trim() : "LAINNYA";
+                if (!groupedData[namaOPD]) {
+                    groupedData[namaOPD] = [];
                 }
-            })
-                .then(response => {
-                    if (!response.ok) throw new Error("Status " + response.status);
-                    return response.text();
-                })
-                .then(textData => {
-                    let data = JSON.parse(textData);
+                groupedData[namaOPD].push(item);
+            });
 
-                    // 1. Tampilkan Visitor
-                    if (data && data.views !== undefined) {
-                        document.getElementById("global_visitor_count").innerText = parseInt(data.views).toLocaleString('id-ID');
-                    }
-
-                    // 2. Ambil Array Proyek
-                    let listMentah = Array.isArray(data) ? data : (data && data.proyek ? data.proyek : []);
-
-                    if (listMentah.length === 0) {
-                        document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Data kosong atau tidak ditemukan di Sheet TW.II.</p>`;
-                        return;
-                    }
-
-                    // ========================================================
-                    // PERUBAHAN DI SINI: Menyaring hanya 7 OPD yang diinginkan
-                    // ========================================================
-                    const opdDiizinkan = [
-                        "DINAS SDACKTR",
-                        "DINAS BMBK",
-                        "DINAS PERHUBUNGAN",
-                        "DINAS PERKIMTAN",
-                        "DISKOMINFO",
-                        "BPBD",
-                        "BAPPELITBANGDA"
-                    ];
-
-                    proyekData = listMentah.filter(item => {
-                        if (!item.opd) return false;
-                        // Mengubah nama OPD menjadi huruf besar dan menghapus spasi di ujung untuk akurasi pencocokan
-                        let namaOPDData = item.opd.toString().trim().toUpperCase();
-                        return opdDiizinkan.includes(namaOPDData);
-                    });
-
-                    if (proyekData.length === 0) {
-                        document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Tidak ada data dari 7 OPD prioritas.</p>`;
-                        return;
-                    }
-                    // ========================================================
-
-                    // Pengelompokan berdasarkan OPD
-                    const groupedData = {};
-                    proyekData.forEach(item => {
-                        let namaOPD = item.opd && item.opd.toString().trim() !== "" ? item.opd.toString().trim() : "LAINNYA";
-                        if (!groupedData[namaOPD]) {
-                            groupedData[namaOPD] = [];
-                        }
-                        groupedData[namaOPD].push(item);
-                    });
-
-                    renderData(groupedData);
-                })
-                .catch(err => {
-                    console.error("Error:", err);
-                    document.getElementById("global_visitor_count").innerText = "Gagal";
-                    document.getElementById('mainContent').innerHTML = `
+            renderData(groupedData);
+        })
+        .catch(err => {
+            console.error("Error:", err);
+            document.getElementById("global_visitor_count").innerText = "Gagal";
+            document.getElementById('mainContent').innerHTML = `
                 <div style="text-align:center; padding:30px; color:#ef4444;">
                     <p style="font-weight:700; margin-bottom:10px;">Gagal Memuat Data:</p>
                     <code style="background:#fee2e2; padding:5px 10px; border-radius:4px; font-size:12px; display:inline-block;">${err.message}</code>
                 </div>`;
-                });
-        }
+        });
+    }
 
-        function hitungTotalPagu(listKegiatan) {
-            let total = 0;
-            listKegiatan.forEach(keg => {
-                if (keg.anggaran) {
-                    let angka = parseFloat(keg.anggaran.toString().replace(/[^0-9]/g, ''));
-                    if (!isNaN(angka)) total += angka;
-                }
-            });
-            return "Rp " + total.toLocaleString('id-ID');
-        }
+    function hitungTotalPagu(listKegiatan) {
+        let total = 0;
+        listKegiatan.forEach(keg => {
+            if (keg.anggaran) {
+                let angka = parseFloat(keg.anggaran.toString().replace(/[^0-9]/g, ''));
+                if (!isNaN(angka)) total += angka;
+            }
+        });
+        return "Rp " + total.toLocaleString('id-ID');
+    }
 
-        // PERUBAHAN: Fungsi renderData dengan perbaikan typo logo Perkimtan
     function renderData(groupedData) {
         const mainContent = document.getElementById('mainContent');
-        mainContent.innerHTML = '';
+        mainContent.innerHTML = ''; // Bersihkan tulisan Loading
 
         Object.keys(groupedData).forEach((namaOPD, index) => {
             const listKegiatan = groupedData[namaOPD];
@@ -803,7 +776,7 @@
             else if (cekNamaAtas.includes("BPBD"))          namaFileLogo = "logo-bpbd";
             else if (cekNamaAtas.includes("PERHUBUNGAN"))   namaFileLogo = "logo-dishub";
             else if (cekNamaAtas.includes("DISKOMINFO"))    namaFileLogo = "logo-kominfo";
-            else if (cekNamaAtas.includes("PERKIMTAN"))     namaFileLogo = "logo-perkimtan"; // Sudah diperbaiki dari perlkimtan
+            else if (cekNamaAtas.includes("PERKIMTAN"))     namaFileLogo = "logo-perkimtan"; 
             else if (cekNamaAtas.includes("SDACKTR"))       namaFileLogo = "logo-sdacktr";
 
             let kegiatanHtml = '';
@@ -816,7 +789,8 @@
                 let kontrakKeg = (keg.kontrak || "-").toString();
                 let tglKeg = (keg.tgl_kontrak || "-").toString();
                 let statusKeg = (keg.status || "-").toString();
-                let fisikKeg = (keg.fisik || "0%").toString();
+                let fisikKeg = (keg.physic || "0%").toString(); // disesuaikan jika field di JSON adalah fisik/physic
+                if(keg.fisik) fisikKeg = keg.fisik.toString();
                 let keuKeg = (keg.keuangan || "Rp 0").toString();
                 let ketKeg = (keg.keterangan || "-").toString();
 
@@ -844,12 +818,12 @@
                         <div class="detail-row"><div class="detail-label">Keuangan</div><div class="detail-value">${keuKeg}</div></div>
                         <div class="detail-row"><div class="detail-label">Keterangan</div><div class="detail-value">${ketKeg}</div></div>
                     </div>
-                </div>
-                `;
+                </div>`;
             });
 
             let opdCard = document.createElement('div');
-            opdCard.className = 'opd-card mulai-animasi';
+            // Awal dibuat disembunyikan tanpa class animasi agar bisa kita kontrol jedanya lewat JS
+            opdCard.className = 'opd-card'; 
             opdCard.setAttribute('data-index', index);
 
             opdCard.innerHTML = `
@@ -872,152 +846,134 @@
             </div>
             <div id="list-${idOPD}" class="kegiatan-container" style="display:none;">
                 ${kegiatanHtml}
-            </div>
-            `;
+            </div>`;
+            
             mainContent.appendChild(opdCard);
         });
 
-        // Hancurkan tirai splash screen dihilangkan dari sini agar dashboard baru terbuka saat tombol diklik
+        // JALANKAN ANIMASI JATUH BERURUTAN SETELAH ELEMENT SELESAI DICIPTAKAN
+        mulaiAnimasiJatuhBerurutan();
     }
 
-    // TAMBAHAN: Fungsi memicu suara dan animasi loading saat tombol diklik
-    function mulaiLoadingDashboard(button) {
-        // Mainkan efek suara tap_sound.mp3
-        if (typeof tapSound !== 'undefined') {
-            tapSound.currentTime = 0;
-            tapSound.play().catch(() => {});
-        }
-
-        // Ubah tampilan tombol ke mode loading
-        button.innerHTML = '<span class="spinner"></span> Mohon tunggu sebentar...';
-        button.classList.add('loading');
-
-        // Beri jeda 1.2 detik untuk animasi loading sebelum masuk ke dashboard
-        setTimeout(() => {
-            bukaDashboardDanHancurkanSplash();
-        }, 1200);
-    }
-
-    function bukaDashboardDanHancurkanSplash() {
-        const splash = document.getElementById('splashScreen');
-        if (splash) {
-            splash.style.opacity = '0';
-            splash.style.visibility = 'hidden';
-            setTimeout(() => {
-                splash.style.display = 'none';
-            }, 500);
-        }
+    function mulaiAnimasiJatuhBerurutan() {
+        const semuaKartu = document.querySelectorAll('.opd-card');
         
-        const container = document.getElementById('appContainer');
-        if (container) container.style.display = 'flex';
+        semuaKartu.forEach((kartu, index) => {
+            // Berikan jeda staggered (berurutan) 250ms per kartu dari atas ke bawah
+            setTimeout(() => {
+                kartu.classList.add('mulai-animasi');
+                
+                // Kloning suara pop up agar bisa saling bertumpukan nadanya dengan mulus
+                let clonedSound = tapSound.cloneNode();
+                clonedSound.volume = 0.4;
+                clonedSound.play().catch(() => {});
+                
+            }, index * 250);
+        });
     }
 
-        function toggleOPD(button, containerId) {
-            var container = document.getElementById(containerId);
-            if (container.style.display === "block") {
-                container.style.display = "none";
-                button.textContent = "Detail";
-                button.className = "btn btn-primary";
-            } else {
-                container.style.display = "block";
-                button.textContent = "Tutup";
-                button.className = "btn btn-success";
-            }
+    function toggleOPD(button, containerId) {
+        var container = document.getElementById(containerId);
+        if (container.style.display === "block") {
+            container.style.display = "none";
+            button.textContent = "Detail";
+            button.className = "btn btn-primary";
+        } else {
+            container.style.display = "block";
+            button.textContent = "Tutup";
+            button.className = "btn btn-success";
         }
+    }
 
-        function toggleSubDetail(button) {
-            var kegiatanCard = button.closest('.kegiatan-card');
-            var subDetail = kegiatanCard.querySelector('.kegiatan-sub-detail');
-            if (subDetail.style.display === "block") {
-                subDetail.style.display = "none";
-                button.textContent = "Detail";
-                button.className = "btn btn-orange";
-            } else {
-                document.querySelectorAll('.kegiatan-sub-detail').forEach(el => el.style.display = 'none');
-                document.querySelectorAll('.kegiatan-action-cell .btn').forEach(btn => {
-                    if (btn.classList.contains('btn-success')) {
-                        btn.textContent = "Detail";
-                        btn.className = "btn btn-orange";
-                    }
-                });
-                subDetail.style.display = "block";
-                button.textContent = "Tutup";
-                button.className = "btn btn-success";
-            }
-        }
-
-        function toggleFilterPanel() {
-            var panel = document.getElementById('filterPanel');
-            var btn = document.getElementById('filterToggleBtn');
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-                btn.classList.remove('active');
-            } else {
-                panel.style.display = "block";
-                btn.classList.add('active');
-            }
-        }
-
-        function jalankanMultiFilter() {
-            let keyword = document.getElementById('searchInput').value.toLowerCase();
-            let fMetode = document.getElementById('filterMetode').value.toLowerCase();
-            let fKontrak = document.getElementById('filterKontrak').value.toLowerCase();
-
-            let kartuOPD = document.querySelectorAll('.opd-card');
-
-            kartuOPD.forEach(opdCard => {
-                let containerKegiatan = opdCard.querySelector('.kegiatan-container');
-                let tombolOPD = opdCard.querySelector('.opd-action-cell button');
-                let daftarKegiatan = opdCard.querySelectorAll('.kegiatan-card');
-                let adaKegiatanCocok = false;
-
-                daftarKegiatan.forEach(card => {
-                    let namaKegiatan = card.getAttribute('data-nama') || "";
-                    let metodeKegiatan = card.getAttribute('data-metode') || "";
-                    let kontrakKegiatan = card.getAttribute('data-kontrak') || "";
-
-                    let cocokKeyword = (keyword === "" || namaKegiatan.includes(keyword));
-                    let cocokMetode = (fMetode === "" || metodeKegiatan.includes(fMetode));
-                    let cocokKontrak = (fKontrak === "" || kontrakKegiatan.includes(fKontrak));
-
-                    if (cocokKeyword && cocokMetode && cocokKontrak) {
-                        card.style.display = "block";
-                        adaKegiatanCocok = true;
-                    } else {
-                        card.style.display = "none";
-                    }
-                });
-
-                if (keyword === "" && fMetode === "" && fKontrak === "") {
-                    opdCard.style.display = "block";
-                    containerKegiatan.style.display = "none";
-                    tombolOPD.textContent = "Detail";
-                    tombolOPD.className = "btn btn-primary";
-                } else if (adaKegiatanCocok) {
-                    opdCard.style.display = "block";
-                    containerKegiatan.style.display = "block";
-                    tombolOPD.textContent = "Tutup";
-                    tombolOPD.className = "btn btn-success";
-                } else {
-                    opdCard.style.display = "none";
+    function toggleSubDetail(button) {
+        var kegiatanCard = button.closest('.kegiatan-card');
+        var subDetail = kegiatanCard.querySelector('.kegiatan-sub-detail');
+        if (subDetail.style.display === "block") {
+            subDetail.style.display = "none";
+            button.textContent = "Detail";
+            button.className = "btn btn-orange";
+        } else {
+            document.querySelectorAll('.kegiatan-sub-detail').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.kegiatan-action-cell .btn').forEach(btn => {
+                if(btn.classList.contains('btn-success')) {
+                    btn.textContent = "Detail";
+                    btn.className = "btn btn-orange";
                 }
             });
+            subDetail.style.display = "block";
+            button.textContent = "Tutup";
+            button.className = "btn btn-success";
         }
+    }
 
-        // Suara Efek Pasif
-        const tapSound = new Audio("tap_sound.mp3");
-        tapSound.preload = "auto";
-        tapSound.volume = 0.3;
-        let lastPlayTime = 0;
+    function toggleFilterPanel() {
+        var panel = document.getElementById('filterPanel');
+        var btn = document.getElementById('filterToggleBtn');
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+            btn.classList.remove('active');
+        } else {
+            panel.style.display = "block";
+            btn.classList.add('active');
+        }
+    }
 
-        document.addEventListener("click", () => {
-            const now = Date.now();
-            if (now - lastPlayTime < 250) return;
-            lastPlayTime = now;
-            tapSound.currentTime = 0;
-            tapSound.play().catch(() => { });
+    function jalankanMultiFilter() {
+        let keyword = document.getElementById('searchInput').value.toLowerCase();
+        let fMetode = document.getElementById('filterMetode').value.toLowerCase();
+        let fKontrak = document.getElementById('filterKontrak').value.toLowerCase();
+
+        let kartuOPD = document.querySelectorAll('.opd-card');
+
+        kartuOPD.forEach(opdCard => {
+            let containerKegiatan = opdCard.querySelector('.kegiatan-container');
+            let tombolOPD = opdCard.querySelector('.opd-action-cell button');
+            let daftarKegiatan = opdCard.querySelectorAll('.kegiatan-card');
+            let adaKegiatanCocok = false;
+
+            daftarKegiatan.forEach(card => {
+                let namaKegiatan = card.getAttribute('data-nama') || "";
+                let metodeKegiatan = card.getAttribute('data-metode') || "";
+                let kontrakKegiatan = card.getAttribute('data-kontrak') || "";
+
+                let cocokKeyword = (keyword === "" || namaKegiatan.includes(keyword));
+                let cocokMetode = (fMetode === "" || metodeKegiatan.includes(fMetode));
+                let cocokKontrak = (fKontrak === "" || kontrakKegiatan.includes(fKontrak));
+
+                if (cocokKeyword && cocokMetode && cocokKontrak) {
+                    card.style.display = "block";
+                    adaKegiatanCocok = true;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            if (keyword === "" && fMetode === "" && fKontrak === "") {
+                opdCard.style.display = "block";
+                containerKegiatan.style.display = "none";
+                tombolOPD.textContent = "Detail";
+                tombolOPD.className = "btn btn-primary";
+            } else if (adaKegiatanCocok) {
+                opdCard.style.display = "block";
+                containerKegiatan.style.display = "block";
+                tombolOPD.textContent = "Tutup";
+                tombolOPD.className = "btn btn-success";
+            } else {
+                opdCard.style.display = "none";
+            }
         });
-    </script>
-</body>
+    }
 
+    // Suara Efek Klik Manual (Tetap Aktif)
+    let lastPlayTime = 0;
+    document.addEventListener("click", (e) => {
+        if (e.target.classList.contains('btn-masuk')) return; // Lewati klik tombol pembuka agar tidak double audio
+        const now = Date.now();
+        if (now - lastPlayTime < 250) return;
+        lastPlayTime = now;
+        tapSound.currentTime = 0;
+        tapSound.play().catch(() => {});
+    });
+</script>
+</body>
 </html>
